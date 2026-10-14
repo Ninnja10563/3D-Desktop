@@ -1,0 +1,5 @@
+{"accessibility":0,"eventListen":false,"eventPost":false,"kind":"environment","os":"Version 26.6.2 (Build 25G83)","screenCapture":false,"symbols":{"connection":1,"getTransform":1,"setTransform":1,"setWarp":1}}
+{"connection":884867,"kind":"before","own":true,"owner":884867,"ownerResult":0,"readResult":0,"transform":[1,0,0,1,-200,-374],"window":19992}
+{"actual":[1.25,0,0,1.25,-230,-404],"affine":true,"affineResult":0,"appliedReadResult":0,"kind":"apply","requested":[1.25,0,0,1.25,-230,-404],"seconds":2,"warpResult":0}
+{"actual":[1.25,0,0,1.25,-230,-404],"kind":"beforeRestore"}
+{"clearWarpResult":0,"kind":"restore","matrixMatches":true,"readResult":0,"restoreTransformResult":0,"transform":[1,0,0,1,-200,-374]}

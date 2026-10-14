@@ -4,3 +4,7 @@ release/
 test-results/
 *.tsbuildinfo
 .DS_Store
+native/build/
+native/.build/
+native/evidence/local/
+__pycache__/

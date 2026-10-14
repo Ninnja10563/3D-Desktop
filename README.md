@@ -1,5 +1,7 @@
 # 3D Desktop
 
+> **Native window-manager development:** this branch investigates persistent, interactive perspective transforms of existing macOS application windows. See [native experiment, build, and test instructions](native/README.md). It is experimental and does not yet meet the window-manager acceptance criteria. The published `v1.0.0` and its user data remain preserved. The documentation below describes that earlier Electron workspace only.
+
 A local 3D desktop companion for Apple Silicon Macs, including M3. Place windows in depth, orbit your workspace, and focus one window when you want to work.
 
 ![3D Desktop spatial workspace](docs/3d-desktop.png)
