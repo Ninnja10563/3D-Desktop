@@ -1,0 +1,36 @@
+{
+  "name": "3d-desktop",
+  "productName": "3D Desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A spatial desktop for Apple Silicon. Bring your apps into a new dimension.",
+  "author": "3D Desktop contributors",
+  "license": "MIT",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "desktop": "npm run build && electron .",
+    "package:mac": "npm run build && node scripts/package-mac.mjs",
+    "test": "node --test tests/*.test.mjs electron/*.test.cjs",
+    "test:e2e": "playwright test --config tests/playwright.config.ts"
+  },
+  "dependencies": {
+    "lucide-react": "^1.56.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^44.7.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  }
+}
