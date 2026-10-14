@@ -1,0 +1,69 @@
+{
+  "binarySHA256": "0a211bf5e308b40c248366bdac230b2862883110c402837ede64fdfb089b6b30",
+  "test": "30-second idle system-pointer route lifecycle; no physical movement observed",
+  "uiObserved": {
+    "accessibility": "allowed",
+    "screenRecording": "allowed",
+    "stopReasonShown": "proof timeout (30 seconds)",
+    "pointerCheckboxAfterStop": "off"
+  },
+  "limits": [
+    "No pointerWarp or mapped input observed; no motion or dropdown acceptance established.",
+    "Frame delivery rate is not input latency, GPU performance, or a representative active workload."
+  ],
+  "records": [
+    {
+      "event": "launch",
+      "os": "Version 26.6.2 (Build 25G83)",
+      "timestamp": "2026-10-14T19:53:34Z",
+      "version": "0.1.0-experimental"
+    },
+    {
+      "event": "emergencyShortcut",
+      "handlerResult": 0,
+      "result": 0,
+      "timestamp": "2026-10-14T19:53:34Z"
+    },
+    {
+      "customCursor": false,
+      "event": "mouseTapInstalled",
+      "keyboardIntercepted": false,
+      "location": 2,
+      "timestamp": "2026-10-14T19:54:02Z"
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 482;\n    Width = 640;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T19:54:02Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 964,
+      "inputRoute": "systemPointerProbe",
+      "pid": 62170,
+      "pitch": -8,
+      "timestamp": "2026-10-14T19:54:02Z",
+      "width": 1280,
+      "window": 27055,
+      "yaw": 25
+    },
+    {
+      "backdropFrames": 843,
+      "captureDeliveryAgeP50ms": 0.7625829894095659,
+      "captureDeliveryAgeP95ms": 0.9988340025302023,
+      "completeFrames": 1527,
+      "deliveredFPS": 50.88820419111536,
+      "event": "stopped",
+      "reason": "proof timeout (30 seconds)",
+      "releasedButtons": 0,
+      "seconds": 30.006953954696655,
+      "timestamp": "2026-10-14T19:54:32Z"
+    }
+  ]
+}

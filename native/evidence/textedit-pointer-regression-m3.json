@@ -1,0 +1,938 @@
+{
+  "binarySHA256": "8603b24d8d59042768818b721b56653368b5bd9b1f048bdef48fe88f1d55040c",
+  "userReport": "Cursor appears moved by something; cyan cursor goes underneath dropdown; macOS cursor remains visible.",
+  "result": "Failed real-application interaction trial. No exact style-selection pass established.",
+  "intervention": "Restore Desktop invoked; system-pointer mapping checkbox observed disabled.",
+  "records": [
+    {
+      "event": "captureGeometry",
+      "timestamp": "2026-10-14T09:53:51Z"
+    },
+    {
+      "event": "started",
+      "timestamp": "2026-10-14T09:53:51Z",
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        242.71484375,
+        306.4765625
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27716,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        180,
+        304
+      ],
+      "timestamp": "2026-10-14T09:53:54Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        180.83383528620462,
+        304.9642637917457
+      ],
+      "event": "inputPosted",
+      "local": [
+        34.83383528620462,
+        234.9642637917457
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:53:54Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "backdropFrames": 81,
+      "completeFrames": 158,
+      "deliveredFPS": 57.834954390503654,
+      "event": "stopped",
+      "reason": "system pointer probe: motion jump exceeded 120 points",
+      "releasedButtons": 0,
+      "seconds": 2.7319118976593018,
+      "timestamp": "2026-10-14T09:53:54Z"
+    },
+    {
+      "event": "mouseTapInstalled",
+      "timestamp": "2026-10-14T09:54:32Z"
+    },
+    {
+      "event": "captureGeometry",
+      "timestamp": "2026-10-14T09:54:32Z"
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        399.73046875,
+        345.44921875
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        386,
+        354
+      ],
+      "timestamp": "2026-10-14T09:54:32Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        386.54350675155763,
+        354.36842993799377
+      ],
+      "event": "inputPosted",
+      "local": [
+        240.54350675155766,
+        284.36842993799377
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:32Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "started",
+      "timestamp": "2026-10-14T09:54:33Z",
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        461.48046875,
+        329.4140625
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        459,
+        330
+      ],
+      "timestamp": "2026-10-14T09:54:33Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        435.0471680047177,
+        341.392840193977
+      ],
+      "event": "inputPosted",
+      "local": [
+        289.0471680047177,
+        271.392840193977
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:33Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        348.00390625,
+        293.328125
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        348,
+        293
+      ],
+      "timestamp": "2026-10-14T09:54:33Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        358.61295636594525,
+        287.79432483365025
+      ],
+      "event": "inputPosted",
+      "local": [
+        212.61295636594522,
+        217.79432483365025
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:34Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        372,
+        276
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        371,
+        275
+      ],
+      "timestamp": "2026-10-14T09:54:34Z",
+      "type": 1
+    },
+    {
+      "destination": [
+        371.81261075637224,
+        275.79615567397354
+      ],
+      "event": "inputPosted",
+      "local": [
+        225.8126107563722,
+        205.79615567397354
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:34Z",
+      "type": 1,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        371.1875,
+        275
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        370,
+        274
+      ],
+      "timestamp": "2026-10-14T09:54:34Z",
+      "type": 6
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        370,
+        274
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        369,
+        273
+      ],
+      "timestamp": "2026-10-14T09:54:34Z",
+      "type": 2
+    },
+    {
+      "destination": [
+        369.61721030587864,
+        273.80385322804943
+      ],
+      "event": "inputPosted",
+      "local": [
+        223.61721030587864,
+        203.80385322804943
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:34Z",
+      "type": 2,
+      "window": 18902
+    },
+    {
+      "destination": [
+        396.2644005991508,
+        253.77670270864036
+      ],
+      "event": "inputPosted",
+      "local": [
+        250.26440059915078,
+        183.77670270864036
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:34Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        402,
+        186.9921875
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        401,
+        186
+      ],
+      "timestamp": "2026-10-14T09:54:34Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        333.4282526432181,
+        149.02194532679755
+      ],
+      "event": "inputPosted",
+      "local": [
+        187.42825264321812,
+        79.02194532679756
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:35Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        304,
+        125.6171875
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        303,
+        125
+      ],
+      "timestamp": "2026-10-14T09:54:35Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        299.2349718933506,
+        107.83631147629433
+      ],
+      "event": "inputPosted",
+      "local": [
+        153.23497189335055,
+        37.836311476294334
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:35Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        301.37890625,
+        111.37890625
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        301,
+        111
+      ],
+      "timestamp": "2026-10-14T09:54:35Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        303.32604806618076,
+        109.09011549665823
+      ],
+      "event": "inputPosted",
+      "local": [
+        157.3260480661808,
+        39.090115496658235
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:36Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        331.05078125,
+        115.5234375
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        331,
+        115
+      ],
+      "timestamp": "2026-10-14T09:54:36Z",
+      "type": 5
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        336,
+        119
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        335,
+        119
+      ],
+      "timestamp": "2026-10-14T09:54:36Z",
+      "type": 1
+    },
+    {
+      "destination": [
+        335.7084332803167,
+        119.0086686951991
+      ],
+      "event": "inputPosted",
+      "local": [
+        189.70843328031668,
+        49.00866869519911
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:36Z",
+      "type": 1,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        335,
+        119
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        334,
+        119
+      ],
+      "timestamp": "2026-10-14T09:54:36Z",
+      "type": 2
+    },
+    {
+      "event": "popupWindows",
+      "timestamp": "2026-10-14T09:54:36Z"
+    },
+    {
+      "destination": [
+        334.7781935001697,
+        119.05205687539245
+      ],
+      "event": "inputPosted",
+      "local": [
+        188.77819350016972,
+        49.05205687539246
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:36Z",
+      "type": 2,
+      "window": 18902
+    },
+    {
+      "destination": [
+        333.80280893691025,
+        119.93370586348773
+      ],
+      "event": "inputPosted",
+      "local": [
+        187.80280893691025,
+        49.93370586348773
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:37Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        321,
+        153.25
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        320,
+        153
+      ],
+      "timestamp": "2026-10-14T09:54:37Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        291.2848316563543,
+        230.25500520206754
+      ],
+      "event": "inputPosted",
+      "local": [
+        145.2848316563543,
+        160.25500520206754
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:37Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        279.47265625,
+        243.05078125
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        279,
+        243
+      ],
+      "timestamp": "2026-10-14T09:54:37Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        308.52069318356047,
+        249.94595425855385
+      ],
+      "event": "inputPosted",
+      "local": [
+        162.52069318356047,
+        179.94595425855385
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:38Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        325.05078125,
+        232.47265625
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        325,
+        232
+      ],
+      "timestamp": "2026-10-14T09:54:38Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        325.8026645159615,
+        227.22208540128915
+      ],
+      "event": "inputPosted",
+      "local": [
+        179.8026645159615,
+        157.22208540128915
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:38Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        313,
+        251.00390625
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        312,
+        251
+      ],
+      "timestamp": "2026-10-14T09:54:39Z",
+      "type": 5
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        287,
+        270.73828125
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        286,
+        270
+      ],
+      "timestamp": "2026-10-14T09:54:39Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        286.9327132303439,
+        270.72451644604865
+      ],
+      "event": "inputPosted",
+      "local": [
+        140.93271323034386,
+        200.72451644604865
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:39Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        476,
+        422.3125
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        475,
+        422
+      ],
+      "timestamp": "2026-10-14T09:54:40Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        475.70307605184547,
+        422.30087716550184
+      ],
+      "event": "inputPosted",
+      "local": [
+        329.70307605184547,
+        352.30087716550184
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:40Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        489.7890625,
+        419
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        491,
+        418
+      ],
+      "timestamp": "2026-10-14T09:54:40Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        491.6703624248704,
+        418.8762109639107
+      ],
+      "event": "inputPosted",
+      "local": [
+        345.6703624248704,
+        348.8762109639107
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:40Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        554.1015625,
+        487.54296875
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        546,
+        486
+      ],
+      "timestamp": "2026-10-14T09:54:41Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        546.2670014910912,
+        486.8554781815841
+      ],
+      "event": "inputPosted",
+      "local": [
+        400.2670014910911,
+        416.8554781815841
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:41Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        276,
+        453.28515625
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        275,
+        453
+      ],
+      "timestamp": "2026-10-14T09:54:41Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        275.7709249546697,
+        453.2422799535713
+      ],
+      "event": "inputPosted",
+      "local": [
+        129.7709249546697,
+        383.2422799535713
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:41Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        282.66796875,
+        474.00390625
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        282,
+        474
+      ],
+      "timestamp": "2026-10-14T09:54:42Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        282.77836261743744,
+        474.48746053480903
+      ],
+      "event": "inputPosted",
+      "local": [
+        136.77836261743747,
+        404.48746053480903
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:42Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        268.37890625,
+        471
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 18902,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        268,
+        470
+      ],
+      "timestamp": "2026-10-14T09:54:42Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        268.34345386470295,
+        470.78740154121397
+      ],
+      "event": "inputPosted",
+      "local": [
+        122.34345386470295,
+        400.78740154121397
+      ],
+      "routedWindow": 18902,
+      "timestamp": "2026-10-14T09:54:42Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        323,
+        414.734375
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        322,
+        414
+      ],
+      "timestamp": "2026-10-14T09:54:43Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        322.94270996162464,
+        414.71471641598146
+      ],
+      "event": "inputPosted",
+      "local": [
+        176.94270996162464,
+        344.71471641598146
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:43Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        364,
+        538.37890625
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        363,
+        538
+      ],
+      "timestamp": "2026-10-14T09:54:44Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        363.9215079846904,
+        538.3577317492316
+      ],
+      "event": "inputPosted",
+      "local": [
+        217.92150798469038,
+        468.35773174923156
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:44Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        341.3125,
+        531.3125
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        341,
+        531
+      ],
+      "timestamp": "2026-10-14T09:54:44Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        341.3237786938088,
+        531.1469449238266
+      ],
+      "event": "inputPosted",
+      "local": [
+        195.32377869380878,
+        461.14694492382665
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:45Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        337.5234375,
+        518.05078125
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        337,
+        518
+      ],
+      "timestamp": "2026-10-14T09:54:45Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        337.6105450305546,
+        518.2676220589078
+      ],
+      "event": "inputPosted",
+      "local": [
+        191.61054503055462,
+        448.26762205890776
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:45Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        374.25,
+        527.8125
+      ],
+      "rawTargetPID": 34163,
+      "rawWindow": 27750,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        375,
+        528
+      ],
+      "timestamp": "2026-10-14T09:54:46Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        375.39110955250544,
+        528.2201730231657
+      ],
+      "event": "inputPosted",
+      "local": [
+        229.39110955250544,
+        458.2201730231656
+      ],
+      "routedWindow": 27750,
+      "timestamp": "2026-10-14T09:54:46Z",
+      "type": 5,
+      "window": 18902
+    },
+    {
+      "backdropFrames": 883,
+      "completeFrames": 1727,
+      "deliveredFPS": 57.55005967881729,
+      "event": "stopped",
+      "reason": "proof timeout (30 seconds)",
+      "releasedButtons": 0,
+      "seconds": 30.008656978607178,
+      "timestamp": "2026-10-14T09:55:03Z"
+    }
+  ]
+}

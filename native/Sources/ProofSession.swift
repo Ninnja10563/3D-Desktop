@@ -54,9 +54,12 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
     let annotatedRouting: Bool
     let systemPointerRouting: Bool
     var virtualPointer: CGPoint?
-    var lastWarpDestination = CGPoint.zero
+    var pointerMotion = PointerMotion()
+    var pointerFaultPending = false
+    var pendingRestorePoint: CGPoint?
+    var pointerDiagnosticCount = 0
     var pointerEpoch: UInt64 = 0
-    let virtualCursorLayer = CAShapeLayer()
+    let diagnosticCursor = DiagnosticCursorOverlay()
     var tapGesture = false
     var tapEventCount = 0
     var lastTapLog = Date.distantPast
@@ -88,6 +91,7 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
     var latestSurface: IOSurface?
     var timer: Timer?
     var monitor: Timer?
+    var routingMonitor: Timer?
     var stopped = false
     var dragging = false
     var frameCount = 0
@@ -128,19 +132,6 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
         surfaceLayer.cornerRadius = 12
         surfaceLayer.masksToBounds = true
         view.layer?.addSublayer(surfaceLayer)
-        // Diagnostic virtual pointer only. The real system cursor stays visible;
-        // no cursor-hide counter or mouse/cursor disassociation is used.
-        let arrow = CGMutablePath()
-        arrow.move(to: .zero)
-        for point in [CGPoint(x:0,y:22), CGPoint(x:6,y:16), CGPoint(x:10,y:25), CGPoint(x:14,y:23), CGPoint(x:10,y:14), CGPoint(x:18,y:14)] { arrow.addLine(to: point) }
-        arrow.closeSubpath()
-        virtualCursorLayer.path = arrow
-        virtualCursorLayer.fillColor = NSColor.systemTeal.cgColor
-        virtualCursorLayer.strokeColor = NSColor.white.cgColor
-        virtualCursorLayer.lineWidth = 1.5
-        virtualCursorLayer.anchorPoint = .zero
-        virtualCursorLayer.isHidden = true
-        view.layer?.addSublayer(virtualCursorLayer)
         panel.contentView = view
         panel.title = "3D Desktop — experimental interaction proof"
         panel.setAccessibilityRole(.window)
@@ -243,6 +234,13 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
         monitor = Timer(timeInterval: 0.25, repeats: true) { [weak self] _ in self?.checkTarget() }
         RunLoop.main.add(timer!, forMode: .common)
         RunLoop.main.add(monitor!, forMode: .common)
+        if systemPointerRouting, let pid = target.owningApplication?.processID {
+            updatePopupWindows(pid: pid)
+            routingMonitor = Timer(timeInterval: 0.05, repeats: true) { [weak self] _ in
+                self?.updatePopupWindows(pid: pid, force: true)
+            }
+            RunLoop.main.add(routingMonitor!, forMode: .common)
+        }
         log(["event":"started", "window":target.windowID, "pid":target.owningApplication?.processID ?? 0,
              "width":config.width, "height":config.height, "fpsLimit":60, "yaw":25, "pitch":-8, "depth":80,
              "inputRoute":systemPointerRouting ? "systemPointerProbe" : (annotatedRouting ? "annotatedMouseTap" : (Self.experimentalMouseTapEnabled ? "legacySessionTap" : "appKit"))])
@@ -359,8 +357,8 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
         log(["event":"transform", "yaw":yaw, "pitch":pitch, "depth":depth])
     }
 
-    func updatePopupWindows(pid: pid_t) {
-        guard Date().timeIntervalSince(lastRouteRefresh) > 0.05 else { return }
+    func updatePopupWindows(pid: pid_t, force: Bool = false) {
+        guard force || Date().timeIntervalSince(lastRouteRefresh) > 0.05 else { return }
         lastRouteRefresh = Date()
         let windows = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID) as? [[String:Any]] ?? []
         let previous = popupWindows.map { $0.0 }
@@ -391,8 +389,7 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
             let session = Unmanaged<ProofSession>.fromOpaque(context).takeUnretainedValue()
             if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
                 if session.systemPointerRouting {
-                    session.restoreSystemPointer()
-                    DispatchQueue.main.async { [weak session] in session?.stop("system pointer probe: event tap disabled") }
+                    session.failPointerProof("event tap disabled")
                     return Unmanaged.passUnretained(event)
                 }
                 if let tap = session.inputTap { CGEvent.tapEnable(tap: tap, enable: true) }
@@ -403,19 +400,26 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
                 return Unmanaged.passUnretained(event)
             }
             guard !session.stopped, session.panel.isVisible else { return Unmanaged.passUnretained(event) }
+            if session.pointerFaultPending { return nil }
+            let receivedAt = DispatchTime.now().uptimeNanoseconds
+            if session.systemPointerRouting && (event.timestamp > receivedAt || receivedAt - event.timestamp > 1_000_000_000) {
+                session.failPointerProof("event timestamp outside one-second observation window")
+                return nil
+            }
             let primaryHeight = NSScreen.screens.first?.frame.height ?? 0
             var pointer = event.location
-            if session.systemPointerRouting, let virtual = session.virtualPointer {
-                let dx = event.location.x-session.lastWarpDestination.x
-                let dy = event.location.y-session.lastWarpDestination.y
-                // The experiment deliberately fails closed on a stale warp anchor
-                // or a large jump. It is a slow, fixed-geometry hover test.
-                if hypot(dx, dy) > 120 {
-                    session.restoreSystemPointer()
-                    DispatchQueue.main.async { [weak session] in session?.stop("system pointer probe: motion jump exceeded 120 points") }
+            let motion = [.mouseMoved, .leftMouseDragged, .rightMouseDragged, .otherMouseDragged].contains(type)
+            if session.systemPointerRouting, session.virtualPointer != nil {
+                switch session.pointerMotion.consume(absolute: event.location, timestamp: event.timestamp, isMotion: motion) {
+                case .position(let point): pointer = point
+                case .suppressed:
+                    session.recordPointerDiagnostic(["event":"pointerMotionSuppressed", "eventTimeNS":event.timestamp,
+                                                     "raw":[event.location.x,event.location.y]])
+                    return nil
+                case .failure(let reason):
+                    session.failPointerProof(reason)
                     return nil
                 }
-                pointer = CGPoint(x: virtual.x + dx, y: virtual.y + dy)
             } else if session.systemPointerRouting && [.leftMouseDragged, .rightMouseDragged, .otherMouseDragged, .leftMouseUp, .rightMouseUp, .otherMouseUp].contains(type) {
                 // Never steal a drag whose button-down was delivered elsewhere.
                 return Unmanaged.passUnretained(event)
@@ -425,40 +429,58 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
             let sourcePoint = session.unprojectCanvasPoint(local)
             guard session.tapGesture || session.dragging || (session.view.bounds.contains(local) && CGRect(origin: .zero, size: session.target.frame.size).contains(sourcePoint)) else {
                 if session.systemPointerRouting, session.virtualPointer != nil {
-                    session.restoreSystemPointer(at: pointer)
-                    // This event was annotated at the old source location. Drop
-                    // only the transition event; the next hardware event is native.
+                    // End this bounded probe instead of recapturing stale queued
+                    // events immediately after warping back to the desktop.
+                    session.failPointerProof("pointer left projected surface", restoreAt: pointer)
                     return nil
                 }
                 return Unmanaged.passUnretained(event)
             }
             guard let copy = event.copy() else { return Unmanaged.passUnretained(event) }
             if session.systemPointerRouting {
-                let destination = CGPoint(x: session.target.frame.minX+sourcePoint.x,
-                                          y: session.target.frame.minY+sourcePoint.y)
-                guard destination.x.isFinite, destination.y.isFinite else { return nil }
-                if session.virtualPointer == nil { session.pointerEpoch &+= 1 }
+                guard let pid = session.target.owningApplication?.processID,
+                      NSRunningApplication(processIdentifier: pid)?.isActive == true else {
+                    session.failPointerProof("target lost focus")
+                    return nil
+                }
+                if session.virtualPointer == nil {
+                    session.pointerEpoch &+= 1
+                    if case .failure(let reason) = session.pointerMotion.begin(absolute: event.location, virtual: pointer, timestamp: event.timestamp) {
+                        session.failPointerProof(reason); return nil
+                    }
+                }
                 session.virtualPointer = pointer
                 session.panel.ignoresMouseEvents = true
-                let result = CGWarpMouseCursorPosition(destination)
-                guard result == .success else {
-                    session.restoreSystemPointer(at: pointer)
-                    DispatchQueue.main.async { [weak session] in session?.stop("system pointer mapping failed") }
-                    return nil
+                // Quantize the requested warp so fractional rounding is not fed
+                // back into the next physical movement estimate.
+                let destination = CGPoint(x: (session.target.frame.minX+sourcePoint.x).rounded(),
+                                          y: (session.target.frame.minY+sourcePoint.y).rounded())
+                let start = DispatchTime.now().uptimeNanoseconds
+                guard let before = CGEvent(source: nil)?.location,
+                      before.x.isFinite, before.y.isFinite, destination.x.isFinite, destination.y.isFinite else {
+                    session.failPointerProof("invalid pointer sample"); return nil
                 }
-                if let actual = CGEvent(source: nil)?.location, hypot(actual.x-destination.x, actual.y-destination.y) > 4 {
-                    session.restoreSystemPointer(at: pointer)
-                    DispatchQueue.main.async { [weak session] in
-                        session?.log(["event":"pointerReadbackMismatch", "requested":[destination.x,destination.y], "actual":[actual.x,actual.y]])
-                        session?.stop("system pointer probe: warp readback mismatch")
+                if before != destination {
+                    guard session.pointerMotion.canWarp else {
+                        session.failPointerProof("button or scroll arrived during motion rebaseline"); return nil
                     }
-                    return nil
+                    let result = CGWarpMouseCursorPosition(destination)
+                    let end = DispatchTime.now().uptimeNanoseconds
+                    guard result == .success else {
+                        session.failPointerProof("system pointer mapping failed"); return nil
+                    }
+                    if let reason = session.pointerMotion.recordWarp(from: before, to: destination, start: start, end: end) {
+                        session.failPointerProof(reason); return nil
+                    }
+                    // A readback is diagnostic, not an atomic warp acknowledgment:
+                    // hardware can move between the warp and this sample.
+                    let actual = CGEvent(source: nil)?.location
+                    session.recordPointerDiagnostic(["event":"pointerWarp", "eventTimeNS":event.timestamp,
+                        "startNS":start, "endNS":end, "before":[before.x,before.y],
+                        "requested":[destination.x,destination.y], "actual":actual.map { [$0.x,$0.y] } ?? [],
+                        "virtual":[pointer.x,pointer.y], "raw":[event.location.x,event.location.y]])
                 }
-                session.lastWarpDestination = destination
-                CATransaction.begin(); CATransaction.setDisableActions(true)
-                session.virtualCursorLayer.position = local
-                session.virtualCursorLayer.isHidden = false
-                CATransaction.commit()
+                session.diagnosticCursor.show(at: pointer, primaryHeight: primaryHeight)
             }
             if [.leftMouseDown, .rightMouseDown, .otherMouseDown].contains(type) { session.tapGesture = true }
             if [.leftMouseUp, .rightMouseUp, .otherMouseUp].contains(type) { session.tapGesture = false }
@@ -467,13 +489,12 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
             let cursor = sample ? CGEvent(source: nil)?.location : nil
             let epoch = session.pointerEpoch
             if sample { session.lastTapLog = Date() }
-            // Return promptly: AX focus, popup discovery, and logging must not block
-            // the WindowServer callback. Copies retain event data until processing.
-            DispatchQueue.main.async { [weak session] in
+            let deliver = { [weak session] in
                 guard let session, !session.stopped, let nsEvent = NSEvent(cgEvent: copy) else { return }
                 guard !session.systemPointerRouting || session.pointerEpoch == epoch else { return }
                 if sample {
-                    session.log(["event":"tapInput", "type":type.rawValue,
+                    session.logInput(["event":"tapInput", "type":type.rawValue,
+                                 "eventTimeNS":copy.timestamp,
                                  "raw":[copy.location.x,copy.location.y],
                                  "sampledCursor":cursor.map { [$0.x,$0.y] } ?? [],
                                  "rawTargetPID":copy.getIntegerValueField(.eventTargetUnixProcessID),
@@ -481,6 +502,14 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
                                  "route":session.systemPointerRouting ? "systemPointerProbe" : (session.annotatedRouting ? "annotatedMouseTap" : "legacySessionTap")])
                 }
                 session.forward(nsEvent, localOverride: local, screenPointOverride: global, sourcePointOverride: sourcePoint)
+            }
+            if session.systemPointerRouting {
+                // Post before another callback can warp to a different point.
+                // This path uses cached popup routing and never performs AX focus.
+                // Posting is still asynchronous in the target process.
+                deliver()
+            } else {
+                DispatchQueue.main.async(execute: deliver)
             }
             // Do not let AppKit menu tracking also receive the unprojected hardware event.
             return nil
@@ -494,6 +523,31 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
         return true
     }
 
+    func logInput(_ record: [String: Any]) {
+        if systemPointerRouting {
+            DispatchQueue.main.async { [weak self] in self?.log(record) }
+        } else {
+            log(record)
+        }
+    }
+
+    func recordPointerDiagnostic(_ record: [String: Any]) {
+        // Bounded coordinate-only evidence; never capture keystrokes or pixels.
+        guard pointerDiagnosticCount < 512 else { return }
+        pointerDiagnosticCount += 1
+        DispatchQueue.main.async { [weak self] in self?.log(record) }
+    }
+
+    func failPointerProof(_ reason: String, restoreAt point: CGPoint? = nil) {
+        guard !pointerFaultPending else { return }
+        pointerFaultPending = true
+        pendingRestorePoint = point
+        pointerEpoch &+= 1
+        // Queued stop releases posted buttons before restoring the pointer.
+        // Drop intervening mouse callbacks until that ordered cleanup runs.
+        DispatchQueue.main.async { [weak self] in self?.stop("system pointer probe: \(reason)") }
+    }
+
     func restoreSystemPointer(at point: CGPoint? = nil) {
         pointerEpoch &+= 1
         if let destination = point ?? virtualPointer {
@@ -501,7 +555,8 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
         }
         virtualPointer = nil
         panel.ignoresMouseEvents = false
-        virtualCursorLayer.isHidden = true
+        pointerMotion.reset()
+        diagnosticCursor.hide()
     }
 
     func updateNativeCursor(at point: CGPoint) {
@@ -562,10 +617,10 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
             return
         }
         let destination = CGPoint(x: target.frame.minX + point.x, y: target.frame.minY + point.y)
-        updatePopupWindows(pid: pid)
+        if !systemPointerRouting { updatePopupWindows(pid: pid) }
         let popup = popupWindows.first(where: { $0.1.contains(destination) })?.0
         if down {
-            if popupWindows.isEmpty { focusTarget() }
+            if !systemPointerRouting && popupWindows.isEmpty { focusTarget() }
             dragging = true; gestureWindow = popup ?? target.windowID
         }
         let routedWindow = gestureWindow ?? popup ?? target.windowID
@@ -618,7 +673,7 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
         let logHover = event.type == .mouseMoved && Date().timeIntervalSince(lastHoverLog) > 0.5
         if logHover { lastHoverLog = Date() }
         if down || up || event.type == .scrollWheel || logHover {
-            log(["event":"inputPosted", "type":event.type.rawValue, "local":[point.x,point.y],
+            logInput(["event":"inputPosted", "type":event.type.rawValue, "local":[point.x,point.y],
                  "destination":[destination.x,destination.y], "window":target.windowID, "routedWindow":routedWindow])
         }
     }
@@ -641,8 +696,9 @@ final class ProofSession: NSObject, SCStreamOutput, SCStreamDelegate, @unchecked
         if let inputTap { CGEvent.tapEnable(tap: inputTap, enable: false); CFMachPortInvalidate(inputTap) }
         if let inputTapSource { CFRunLoopRemoveSource(CFRunLoopGetMain(), inputTapSource, .commonModes) }
         inputTap = nil; inputTapSource = nil
-        restoreSystemPointer()
-        timer?.invalidate(); monitor?.invalidate()
+        restoreSystemPointer(at: pendingRestorePoint)
+        timer?.invalidate(); monitor?.invalidate(); routingMonitor?.invalidate()
+        diagnosticCursor.cleanup()
         panel.orderOut(nil); NSCursor.arrow.set()
         surfaceLayer.contents = nil; latestSurface = nil
         backdropLayer.contents = nil; backdropSurface = nil

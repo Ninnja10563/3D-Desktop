@@ -10,6 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     var picker: NSPopUpButton!
     var routeToggle: NSButton!
     var pointerToggle: NSButton!
+    var proofStatus: NSTextField!
     var candidates: [SCWindow] = []
     var session: ProofSession?
     var hotkey: EventHotKeyRef?
@@ -89,7 +90,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     func buildControls() {
-        window = NSWindow(contentRect: NSRect(x:250,y:250,width:650,height:455), styleMask:[.titled,.closable], backing:.buffered, defer:false)
+        window = NSWindow(contentRect: NSRect(x:250,y:250,width:650,height:495), styleMask:[.titled,.closable], backing:.buffered, defer:false)
         window.title = "3D Desktop — Experimental Proof"
         window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
@@ -118,6 +119,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         actions.addArrangedSubview(NSButton(title:"Start Interaction Proof",target:self,action:#selector(startProof)))
         actions.addArrangedSubview(NSButton(title:"Restore Desktop",target:self,action:#selector(restore)))
         stack.addArrangedSubview(actions)
+        proofStatus = NSTextField(wrappingLabelWithString: "Ready. Experimental pointer mapping is off by default.")
+        stack.addArrangedSubview(proofStatus)
         stack.addArrangedSubview(NSTextField(wrappingLabelWithString:"Original windows remain untouched. Live desktop patch replaces dark surround. No audio or network.\nCaptured window and desktop patch remain in memory. Local log records pointer coordinates, never keystrokes."))
         updatePermissions()
     }
@@ -147,10 +150,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
     @objc func startProof() {
         guard hotkey != nil, !starting, candidates.indices.contains(picker.indexOfSelectedItem), AXIsProcessTrusted(), CGPreflightScreenCaptureAccess() else { updatePermissions(); return }
+        let usePointerMapping = pointerToggle.state == .on
+        let useLateRouting = routeToggle.state == .on
         restore()
         let target = candidates[picker.indexOfSelectedItem]
-        let proof = ProofSession(target:target, annotatedRouting:routeToggle.state == .on, systemPointerRouting:pointerToggle.state == .on,
-                                 log:{ [weak self] in self?.log($0) }, ended:{ [weak self] reason in self?.information.stringValue = "Restored: \(reason)" })
+        let proof = ProofSession(target:target, annotatedRouting:useLateRouting, systemPointerRouting:usePointerMapping,
+                                 log:{ [weak self] in self?.log($0) }, ended:{ [weak self] reason in
+                                     guard let self else { return }
+                                     self.proofStatus.stringValue = "Restored: \(reason)"
+                                     self.pointerToggle.state = .off
+                                     // Keep the reason visible after an automatic stop, without
+                                     // stealing keyboard focus from the original application.
+                                     self.window.orderFrontRegardless()
+                                 })
+        proofStatus.stringValue = "Starting interaction proof…"
         starting = true
         let generation = startGeneration
         Task { @MainActor in
@@ -159,7 +172,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             // The emergency action invalidates this pending start as well.
             proof.focusTarget()
             try? await Task.sleep(nanoseconds: 350_000_000)
-            guard startGeneration == generation else { return }
+            guard startGeneration == generation else {
+                proof.diagnosticCursor.cleanup()
+                proof.panel.close()
+                return
+            }
             session = proof
             do { try await proof.start(); if !proof.stopped { window.orderOut(nil) } }
             catch { proof.stop(error.localizedDescription); showControls(); information.stringValue = error.localizedDescription }
@@ -178,7 +195,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             session.resetView()
         }
     }
-    func stopProof(reason: String) { startGeneration &+= 1; starting = false; session?.stop(reason); session = nil }
+    func stopProof(reason: String) {
+        startGeneration &+= 1
+        if starting {
+            proofStatus.stringValue = "Restored: \(reason) (pending start cancelled)"
+            pointerToggle.state = .off
+            window.orderFrontRegardless()
+        }
+        starting = false
+        session?.stop(reason)
+        session = nil
+    }
     @objc func restore() { stopProof(reason: "restore control") }
     @objc func quit() { stopProof(reason: "utility quit or termination signal"); NSApp.terminate(nil) }
     func applicationWillTerminate(_ notification: Notification) { restore(); if let hotkey { UnregisterEventHotKey(hotkey) }; try? logFile?.close() }
