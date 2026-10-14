@@ -1,0 +1,228 @@
+{
+  "binary_sha256": "8603b24d8d59042768818b721b56653368b5bd9b1f048bdef48fe88f1d55040c",
+  "result": "PARTIAL: user reports hover border and event dot followed cyan cursor; run ended after 2.4025 seconds on pointer readback guard",
+  "user_report": "Hover border and dot follow cyan cursor",
+  "scope": "Separate diagnostic target, not third-party application acceptance. No sustained-hover or dropdown pass inferred.",
+  "events": [
+    {
+      "event": "launch",
+      "os": "Version 26.6.2 (Build 25G83)",
+      "timestamp": "2026-10-14T09:23:05Z",
+      "version": "0.1.0-experimental"
+    },
+    {
+      "event": "emergencyShortcut",
+      "handlerResult": 0,
+      "result": 0,
+      "timestamp": "2026-10-14T09:23:05Z"
+    },
+    {
+      "customCursor": false,
+      "event": "mouseTapInstalled",
+      "keyboardIntercepted": false,
+      "location": 2,
+      "timestamp": "2026-10-14T09:25:02Z"
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 482;\n    Width = 640;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T09:25:03Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 964,
+      "inputRoute": "systemPointerProbe",
+      "pid": 62170,
+      "pitch": -8,
+      "timestamp": "2026-10-14T09:25:03Z",
+      "width": 1280,
+      "window": 27055,
+      "yaw": 25
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        589.1328125,
+        312.0625
+      ],
+      "rawTargetPID": 62170,
+      "rawWindow": 27055,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        536,
+        300
+      ],
+      "timestamp": "2026-10-14T09:25:03Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        536.5726231496526,
+        300.48385477931265
+      ],
+      "event": "inputPosted",
+      "local": [
+        121.57262314965266,
+        176.48385477931268
+      ],
+      "routedWindow": 27055,
+      "timestamp": "2026-10-14T09:25:03Z",
+      "type": 5,
+      "window": 27055
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        613.25,
+        287.18359375
+      ],
+      "rawTargetPID": 62170,
+      "rawWindow": 27055,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        614,
+        286
+      ],
+      "timestamp": "2026-10-14T09:25:03Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        623.1190089264522,
+        284.89013634491204
+      ],
+      "event": "inputPosted",
+      "local": [
+        208.11900892645227,
+        160.89013634491204
+      ],
+      "routedWindow": 27055,
+      "timestamp": "2026-10-14T09:25:03Z",
+      "type": 5,
+      "window": 27055
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        722,
+        298.00390625
+      ],
+      "rawTargetPID": 62170,
+      "rawWindow": 27055,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        721,
+        298
+      ],
+      "timestamp": "2026-10-14T09:25:04Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        720.8245368662477,
+        300.44463461926887
+      ],
+      "event": "inputPosted",
+      "local": [
+        305.82453686624774,
+        176.44463461926887
+      ],
+      "routedWindow": 27055,
+      "timestamp": "2026-10-14T09:25:04Z",
+      "type": 5,
+      "window": 27055
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        611.9453125,
+        366
+      ],
+      "rawTargetPID": 62170,
+      "rawWindow": 27055,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        611,
+        365
+      ],
+      "timestamp": "2026-10-14T09:25:04Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        611.4802526123282,
+        365.7976802660871
+      ],
+      "event": "inputPosted",
+      "local": [
+        196.48025261232814,
+        241.7976802660871
+      ],
+      "routedWindow": 27055,
+      "timestamp": "2026-10-14T09:25:04Z",
+      "type": 5,
+      "window": 27055
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        546.00390625,
+        392.3359375
+      ],
+      "rawTargetPID": 62170,
+      "rawWindow": 27055,
+      "route": "systemPointerProbe",
+      "sampledCursor": [
+        546,
+        392
+      ],
+      "timestamp": "2026-10-14T09:25:05Z",
+      "type": 5
+    },
+    {
+      "destination": [
+        551.216320366711,
+        394.5509142453069
+      ],
+      "event": "inputPosted",
+      "local": [
+        136.21632036671102,
+        270.5509142453069
+      ],
+      "routedWindow": 27055,
+      "timestamp": "2026-10-14T09:25:05Z",
+      "type": 5,
+      "window": 27055
+    },
+    {
+      "actual": [
+        654.3671875,
+        404.95703125
+      ],
+      "event": "pointerReadbackMismatch",
+      "requested": [
+        646.3768737909695,
+        404.0585645281131
+      ],
+      "timestamp": "2026-10-14T09:25:05Z"
+    },
+    {
+      "backdropFrames": 62,
+      "captureDeliveryAgeP50ms": 0.7298330019693822,
+      "captureDeliveryAgeP95ms": 1.7061669932445511,
+      "completeFrames": 72,
+      "deliveredFPS": 29.968446039882092,
+      "event": "stopped",
+      "reason": "system pointer probe: warp readback mismatch",
+      "releasedButtons": 0,
+      "seconds": 2.4025269746780396,
+      "timestamp": "2026-10-14T09:25:05Z"
+    }
+  ]
+}
