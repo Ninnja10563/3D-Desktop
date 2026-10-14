@@ -5,8 +5,15 @@ import QuartzCore
 struct Projection {
     let h: [Double]
     let inverse: [Double]
+    /// Outward-rounded enclosure in top-left source coordinates. A projected
+    /// corner can extend outside the original width/height at valid angles.
+    let projectedBounds: CGRect
 
     init(width: Double, height: Double, yaw: Double, pitch: Double, depth: Double) {
+        precondition(width.isFinite && height.isFinite && width > 0 && height > 0,
+                     "Projection requires finite positive source dimensions")
+        precondition(yaw.isFinite && pitch.isFinite && depth.isFinite,
+                     "Projection requires finite transform parameters")
         let ry = yaw * .pi / 180, rx = pitch * .pi / 180
         let cy = cos(ry), sy = sin(ry), cx = cos(rx), sx = sin(rx)
         let distance = max(width, height) * 2.5
@@ -15,10 +22,27 @@ struct Projection {
         let p = sy / distance, q = -cy * sx / distance
         let ox = width / 2, oy = height / 2
         let k = 1 - p * ox - q * oy
-        h = [scale*a + ox*p, scale*b + ox*q, ox*k - scale*a*ox - scale*b*oy,
-             scale*c + oy*p, scale*d + oy*q, oy*k - scale*c*ox - scale*d*oy,
-             p, q, k]
-        inverse = Self.invert(h)
+        let matrix = [scale*a + ox*p, scale*b + ox*q, ox*k - scale*a*ox - scale*b*oy,
+                      scale*c + oy*p, scale*d + oy*q, oy*k - scale*c*ox - scale*d*oy,
+                      p, q, k]
+        h = matrix
+        let corners = [CGPoint.zero, CGPoint(x: width, y: 0),
+                       CGPoint(x: width, y: height), CGPoint(x: 0, y: height)]
+        // The denominator is affine, so positive values at every corner imply
+        // positivity over the entire source rectangle: no perspective pole.
+        // With distance = 2.5 * max(width, height), it is at least 0.6 for
+        // finite rotation angles, independent of the source aspect ratio.
+        precondition(corners.allSatisfy {
+            let denominator = p * $0.x + q * $0.y + k
+            return denominator.isFinite && denominator > 1e-9
+        }, "Projection crosses the perspective plane")
+        let projected = corners.map { Self.map($0, matrix) }
+        precondition(projected.allSatisfy { $0.x.isFinite && $0.y.isFinite },
+                     "Projection produces non-finite bounds")
+        let minX = floor(projected.map(\.x).min()!), minY = floor(projected.map(\.y).min()!)
+        let maxX = ceil(projected.map(\.x).max()!), maxY = ceil(projected.map(\.y).max()!)
+        projectedBounds = CGRect(x: minX, y: minY, width: maxX-minX, height: maxY-minY)
+        inverse = Self.invert(matrix)
     }
 
     static func invert(_ m: [Double]) -> [Double] {

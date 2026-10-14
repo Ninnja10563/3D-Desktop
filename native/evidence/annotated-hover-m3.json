@@ -1,0 +1,134 @@
+{
+  "binary_sha256": "af52faf6f2742fb9b5bbd64dcfa5c4444abfb360140252148f4a4b56e73fe462",
+  "user_report": {
+    "cursor": "visible; no second projected cursor in this mode",
+    "hover": "fails or is offset inside transformed window",
+    "other_actions": "User says everything else works; no enumerated acceptance matrix or exact dropdown item results recorded."
+  },
+  "tap_samples": 180,
+  "raw_event_to_sampled_system_pointer_distance_points": {
+    "mean": 0.011542299847275858,
+    "max": 1.1791764725096547
+  },
+  "interpretation": "Annotated routing preserved the system pointer near raw hardware coordinates. This does not establish target-side hover success. The selected browser was Zen.",
+  "session_events": [
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 976,
+      "inputRoute": "appKit",
+      "pid": 34163,
+      "pitch": -8,
+      "timestamp": "2026-10-14T08:36:55Z",
+      "width": 1172,
+      "window": 18902,
+      "yaw": 25
+    },
+    {
+      "backdropFrames": 1189,
+      "captureDeliveryAgeP50ms": 1.1576669930946082,
+      "captureDeliveryAgeP95ms": 1.9999590003862977,
+      "completeFrames": 2293,
+      "deliveredFPS": 56.31202542472203,
+      "event": "stopped",
+      "reason": "Space changed",
+      "seconds": 40.7195440530777,
+      "timestamp": "2026-10-14T08:37:35Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 1846,
+      "inputRoute": "appKit",
+      "pid": 82057,
+      "pitch": -8,
+      "timestamp": "2026-10-14T08:37:52Z",
+      "width": 2940,
+      "window": 2104,
+      "yaw": 25
+    },
+    {
+      "backdropFrames": 5250,
+      "captureDeliveryAgeP50ms": 1.0927919938694686,
+      "captureDeliveryAgeP95ms": 1.6044999938458204,
+      "completeFrames": 10050,
+      "deliveredFPS": 55.83197165317794,
+      "event": "stopped",
+      "reason": "three-minute proof timeout",
+      "seconds": 180.004390001297,
+      "timestamp": "2026-10-14T08:40:52Z"
+    },
+    {
+      "customCursor": false,
+      "event": "mouseTapInstalled",
+      "keyboardIntercepted": false,
+      "location": 2,
+      "timestamp": "2026-10-14T08:41:10Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 1846,
+      "inputRoute": "annotatedMouseTap",
+      "pid": 82057,
+      "pitch": -8,
+      "timestamp": "2026-10-14T08:41:11Z",
+      "width": 2940,
+      "window": 2104,
+      "yaw": 25
+    }
+  ],
+  "sample_tap_events": [
+    {
+      "event": "tapInput",
+      "raw": [
+        328.37109375,
+        524.1875
+      ],
+      "rawTargetPID": 57074,
+      "rawWindow": 25989,
+      "route": "annotatedMouseTap",
+      "sampledCursor": [
+        328.37109375,
+        524.1875
+      ],
+      "timestamp": "2026-10-14T08:41:11Z",
+      "type": 5
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        728.37890625,
+        489.765625
+      ],
+      "rawTargetPID": 57074,
+      "rawWindow": 25989,
+      "route": "annotatedMouseTap",
+      "sampledCursor": [
+        728.37890625,
+        489.765625
+      ],
+      "timestamp": "2026-10-14T08:41:11Z",
+      "type": 5
+    },
+    {
+      "event": "tapInput",
+      "raw": [
+        731.91015625,
+        489.765625
+      ],
+      "rawTargetPID": 57074,
+      "rawWindow": 25989,
+      "route": "annotatedMouseTap",
+      "sampledCursor": [
+        732.09765625,
+        489.765625
+      ],
+      "timestamp": "2026-10-14T08:41:11Z",
+      "type": 1
+    }
+  ]
+}

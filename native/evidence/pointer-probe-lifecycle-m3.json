@@ -1,0 +1,79 @@
+{
+  "binary_sha256": "ff26649c46a3bc01306a43a97aa22eeeb3adef76e6eba02fd9b1a12938874304",
+  "system_pointer_trial": {
+    "result": "NO HOVER RESULT: no physical pointer events observed during 30-second trial",
+    "automatic_restore": "Observed logged timeout at30.002seconds, overlays removed"
+  },
+  "forced_exit": {
+    "signal": "SIGKILL",
+    "pid": 62730,
+    "route": "appKit",
+    "state": "two capture streams active, no synthetic mouse button held",
+    "result": "Original diagnostic target remained flat and accessible; subsequent click incremented D from0to1. Not a test of force-exit while system pointer capture or drag is active."
+  },
+  "events": [
+    {
+      "customCursor": false,
+      "event": "mouseTapInstalled",
+      "keyboardIntercepted": false,
+      "location": 2,
+      "timestamp": "2026-10-14T09:17:21Z"
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 482;\n    Width = 640;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T09:17:21Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 964,
+      "inputRoute": "systemPointerProbe",
+      "pid": 62170,
+      "pitch": -8,
+      "timestamp": "2026-10-14T09:17:21Z",
+      "width": 1280,
+      "window": 27055,
+      "yaw": 25
+    },
+    {
+      "backdropFrames": 869,
+      "captureDeliveryAgeP50ms": 0.8977499965112656,
+      "captureDeliveryAgeP95ms": 1.211499999044463,
+      "completeFrames": 1673,
+      "deliveredFPS": 55.76247702870504,
+      "event": "stopped",
+      "reason": "proof timeout (30 seconds)",
+      "releasedButtons": 0,
+      "seconds": 30.002254009246826,
+      "timestamp": "2026-10-14T09:17:51Z"
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 482;\n    Width = 640;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T09:18:30Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 964,
+      "inputRoute": "appKit",
+      "pid": 62170,
+      "pitch": -8,
+      "timestamp": "2026-10-14T09:18:30Z",
+      "width": 1280,
+      "window": 27055,
+      "yaw": 25
+    }
+  ]
+}

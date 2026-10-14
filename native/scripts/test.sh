@@ -4,4 +4,4 @@ cd "$(dirname "$0")/.."
 mkdir -p build
 xcrun swiftc -swift-version 5 -O -framework QuartzCore Sources/Projection.swift Tests/ProjectionTests.swift -o build/ProjectionTests
 build/ProjectionTests
-bash -n scripts/build.sh scripts/build-probe.sh
+bash -n scripts/*.sh

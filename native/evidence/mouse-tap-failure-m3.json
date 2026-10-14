@@ -1,0 +1,199 @@
+{
+  "binary_sha256": "4a762c0bd74565d66f39ccb58943022044a30f98428bde809915b0639864538f",
+  "result": "FAILED: user reported cursor disappeared and hover no longer tracked inside the transformed floating window with mouse-only event interception; ordinary desktop pointer remained functional. Utility terminated; route must not ship enabled.",
+  "events": [
+    {
+      "event": "launch",
+      "os": "Version 26.6.2 (Build 25G83)",
+      "timestamp": "2026-10-14T08:19:55Z",
+      "version": "0.1.0-experimental"
+    },
+    {
+      "event": "mouseTapInstalled",
+      "keyboardIntercepted": false,
+      "timestamp": "2026-10-14T08:21:02Z"
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 923;\n    Width = 1470;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T08:21:02Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 1846,
+      "pid": 82057,
+      "pitch": -8,
+      "timestamp": "2026-10-14T08:21:02Z",
+      "width": 2940,
+      "window": 2104,
+      "yaw": 25
+    },
+    {
+      "backdropFrames": 161,
+      "captureDeliveryAgeP50ms": 1.5087080100784078,
+      "captureDeliveryAgeP95ms": 8.743415994103998,
+      "completeFrames": 305,
+      "deliveredFPS": 54.03201970906291,
+      "event": "stopped",
+      "reason": "Space changed",
+      "seconds": 5.644801020622253,
+      "timestamp": "2026-10-14T08:21:08Z"
+    },
+    {
+      "event": "mouseTapInstalled",
+      "keyboardIntercepted": false,
+      "timestamp": "2026-10-14T08:21:11Z"
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 923;\n    Width = 1470;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T08:21:11Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 1846,
+      "pid": 82057,
+      "pitch": -8,
+      "timestamp": "2026-10-14T08:21:11Z",
+      "width": 2940,
+      "window": 2104,
+      "yaw": 25
+    },
+    {
+      "event": "popupWindows",
+      "timestamp": "2026-10-14T08:21:25Z",
+      "windows": [
+        {
+          "bounds": "{{0, 0}, {1470, 65}}",
+          "id": 24425
+        }
+      ]
+    },
+    {
+      "event": "popupWindows",
+      "timestamp": "2026-10-14T08:21:25Z",
+      "windows": []
+    },
+    {
+      "event": "popupWindows",
+      "timestamp": "2026-10-14T08:21:31Z",
+      "windows": [
+        {
+          "bounds": "{{0, 0}, {1470, 65}}",
+          "id": 24432
+        }
+      ]
+    },
+    {
+      "event": "popupWindows",
+      "timestamp": "2026-10-14T08:21:31Z",
+      "windows": []
+    },
+    {
+      "backdropFrames": 1150,
+      "captureDeliveryAgeP50ms": 1.1374999885447323,
+      "captureDeliveryAgeP95ms": 4.05745800526347,
+      "completeFrames": 2167,
+      "deliveredFPS": 54.20164688847666,
+      "event": "stopped",
+      "reason": "Space changed",
+      "seconds": 39.980334997177124,
+      "timestamp": "2026-10-14T08:21:51Z"
+    },
+    {
+      "event": "mouseTapInstalled",
+      "keyboardIntercepted": false,
+      "timestamp": "2026-10-14T08:22:25Z"
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 488;\n    Width = 586;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T08:22:25Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 976,
+      "pid": 34163,
+      "pitch": -8,
+      "timestamp": "2026-10-14T08:22:25Z",
+      "width": 1172,
+      "window": 18902,
+      "yaw": 25
+    },
+    {
+      "backdropFrames": 274,
+      "captureDeliveryAgeP50ms": 1.036459012539126,
+      "captureDeliveryAgeP95ms": 1.5175419976003468,
+      "completeFrames": 538,
+      "deliveredFPS": 57.505806478642505,
+      "event": "stopped",
+      "reason": "Space changed",
+      "seconds": 9.355576992034912,
+      "timestamp": "2026-10-14T08:22:35Z"
+    },
+    {
+      "event": "mouseTapInstalled",
+      "keyboardIntercepted": false,
+      "timestamp": "2026-10-14T08:23:23Z"
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 923;\n    Width = 1470;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T08:23:23Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 1846,
+      "pid": 33525,
+      "pitch": -8,
+      "timestamp": "2026-10-14T08:23:23Z",
+      "width": 2940,
+      "window": 18476,
+      "yaw": 25
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 847;\n    Width = 1470;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T08:23:43Z"
+    },
+    {
+      "backdropFrames": 611,
+      "captureDeliveryAgeP50ms": 1.3955409958725795,
+      "captureDeliveryAgeP95ms": 4.139209006098099,
+      "completeFrames": 65,
+      "deliveredFPS": 3.1318928692728583,
+      "event": "stopped",
+      "reason": "target closed, moved, resized, minimized, or left current Space",
+      "seconds": 20.75422203540802,
+      "timestamp": "2026-10-14T08:23:43Z"
+    }
+  ]
+}

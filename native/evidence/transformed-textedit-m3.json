@@ -1,0 +1,92 @@
+{
+  "binary_sha256": "bcb7c11849dfbd66b3ba7a4eac8c8fc273c6e845c9a8976f7c329e9785bd292c",
+  "observations": {
+    "perspective": "visible in repeated app-window screenshots",
+    "mapped_button": "Bold enabled then disabled at projected coordinate (177,157) in 1172x976 screenshot",
+    "drag": "first line visibly selected after projected drag",
+    "typing": "live user text changes visible; focus transitions not independently isolated",
+    "popup": "style menu opened, attempted Bold selection dismissed it without changing Regular; failure",
+    "shortcut": "app-targeted automated key chord did not visibly restore; hardware-global shortcut not established",
+    "termination": "SIGTERM ended native process; target-side visual restoration still needs verification",
+    "user_confirmation": "User explicitly confirmed typing, correct cursor placement, and scrolling through tilted TextEdit; also reported dropdown alignment failures."
+  },
+  "sessions": [
+    {
+      "event": "launch",
+      "os": "Version 26.6.2 (Build 25G83)",
+      "timestamp": "2026-10-14T07:45:41Z",
+      "version": "0.1.0-experimental"
+    },
+    {
+      "event": "emergencyShortcut",
+      "result": 0,
+      "timestamp": "2026-10-14T07:45:41Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 976,
+      "pid": 34163,
+      "pitch": -8,
+      "timestamp": "2026-10-14T07:46:08Z",
+      "width": 1172,
+      "window": 18902,
+      "yaw": 25
+    },
+    {
+      "captureDeliveryAgeP50ms": 0.9392500069225207,
+      "captureDeliveryAgeP95ms": 1.386500007356517,
+      "completeFrames": 1100,
+      "deliveredFPS": 57.29017790214102,
+      "event": "stopped",
+      "reason": "restore requested",
+      "seconds": 19.200498938560486,
+      "timestamp": "2026-10-14T07:46:27Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 976,
+      "pid": 34163,
+      "pitch": -8,
+      "timestamp": "2026-10-14T07:47:00Z",
+      "width": 1172,
+      "window": 18902,
+      "yaw": 25
+    },
+    {
+      "captureDeliveryAgeP50ms": 0.9628749976400286,
+      "captureDeliveryAgeP95ms": 1.3568750000558794,
+      "completeFrames": 639,
+      "deliveredFPS": 56.92579347713805,
+      "event": "stopped",
+      "reason": "restore requested",
+      "seconds": 11.22513997554779,
+      "timestamp": "2026-10-14T07:47:11Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 976,
+      "pid": 34163,
+      "pitch": -8,
+      "timestamp": "2026-10-14T07:47:53Z",
+      "width": 1172,
+      "window": 18902,
+      "yaw": 25
+    },
+    {
+      "captureDeliveryAgeP50ms": 0.9719579975353554,
+      "captureDeliveryAgeP95ms": 1.368583005387336,
+      "completeFrames": 9092,
+      "deliveredFPS": 57.229341050415194,
+      "event": "stopped",
+      "reason": "restore requested",
+      "seconds": 158.8695559501648,
+      "timestamp": "2026-10-14T07:50:32Z"
+    }
+  ]
+}

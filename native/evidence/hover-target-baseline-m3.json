@@ -1,0 +1,169 @@
+{
+  "fixture_binary_sha256": "b178c22b450334e9f5d55856fa18ccda1808a3cb3cc23d153d5997f84cb8b05f",
+  "scope": "Untransformed diagnostic app, automated coordinate click; not a third-party app acceptance test.",
+  "observation": "Click in A increased A counter, but system-pointer location remained outside. Automation event coordinates do not establish physical hover position.",
+  "events": [
+    {
+      "coordinateConventions": "AppKit window: bottom-left; local view: top-left; CG global: top-left",
+      "pid": 62170,
+      "timestamp": 1791969136.7762198,
+      "type": "launch"
+    },
+    {
+      "cgGlobal": {
+        "x": 570,
+        "y": 369
+      },
+      "clicks": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "enters": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "eventLocal": {
+        "x": 155,
+        "y": 213
+      },
+      "eventRegion": "A",
+      "eventWindow": {
+        "x": 155,
+        "y": 237
+      },
+      "exits": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "moves": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "sequence": 1,
+      "systemLocal": {
+        "x": 584,
+        "y": 553
+      },
+      "systemRegion": "outside",
+      "systemWindow": {
+        "x": 584,
+        "y": -103
+      },
+      "timestamp": 1791969146.7942061,
+      "trackingRegion": "outside",
+      "type": "mouseMoved"
+    },
+    {
+      "cgGlobal": {
+        "x": 570,
+        "y": 369
+      },
+      "clicks": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "enters": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "eventLocal": {
+        "x": 155,
+        "y": 213
+      },
+      "eventRegion": "A",
+      "eventWindow": {
+        "x": 155,
+        "y": 237
+      },
+      "exits": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "moves": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "sequence": 2,
+      "systemLocal": {
+        "x": 584,
+        "y": 553
+      },
+      "systemRegion": "outside",
+      "systemWindow": {
+        "x": 584,
+        "y": -103
+      },
+      "timestamp": 1791969146.908191,
+      "trackingRegion": "outside",
+      "type": "mouseDown"
+    },
+    {
+      "cgGlobal": {
+        "x": 570,
+        "y": 369
+      },
+      "clicks": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "enters": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "eventLocal": {
+        "x": 155,
+        "y": 213
+      },
+      "eventRegion": "A",
+      "eventWindow": {
+        "x": 155,
+        "y": 237
+      },
+      "exits": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "moves": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "sequence": 3,
+      "systemLocal": {
+        "x": 584,
+        "y": 553
+      },
+      "systemRegion": "outside",
+      "systemWindow": {
+        "x": 584,
+        "y": -103
+      },
+      "timestamp": 1791969146.961653,
+      "trackingRegion": "outside",
+      "type": "mouseUp"
+    }
+  ]
+}

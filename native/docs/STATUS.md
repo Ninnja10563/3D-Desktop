@@ -4,32 +4,65 @@ This is an **incomplete experimental branch**, not the requested finished 3D win
 
 Host inspected directly: MacBook Air Mac15,12, Apple M3 (8 CPU / 10 GPU cores), 16 GB RAM, macOS 26.6.2 (25G83). One built-in display, hardware resolution 2560 × 1664; logical desktop dimensions observed through window APIs were 1470 × 956. Existing custom SIP configuration was recorded but not changed. No Dock injection or scripting addition was attempted.
 
-## Established
+## Established on the first interactive build
 
-- Native source compiles as arm64 using the host's Apple Command Line Tools / Swift 6.3.3.
-- Local ad-hoc bundle signature verification passes.
-- The native menu-bar utility launches; emergency shortcut registration returns `noErr`.
-- An owned-window affine transform changes and reads back correctly. The original matrix is restored.
-- The same operation on a disposable TextEdit window returns `kCGErrorSuccess` but the matrix remains unchanged after run-loop flushing and again before restoration. API success is therefore insufficient evidence.
-- The private warp symbols are present; calls return 0. This does **not** establish a visible warp or working input on a foreign window.
-- Independent projection/CALayer/inverse-coordinate tests pass for 17,424 points.
-- Accessibility and Screen Recording permissions were successfully granted and observed after restarting a native build. A subsequent ad-hoc rebuild required new grants.
-- A real TextEdit ScreenCaptureKit stream delivered 15 complete frames before the initial safety monitor stopped the proof after 0.258 seconds. This proves only that initial capture worked on that build. It does not establish sustained rendering or interaction.
-- App launch, permission gating, current-window discovery, source compilation, and packaging were exercised on this Mac.
+Binary SHA-256: `bcb7c11849dfbd66b3ba7a4eac8c8fc273c6e845c9a8976f7c329e9785bd292c`.
 
-An idle, permissions-gated run was sampled for 30 seconds (58 `ps` samples at approximately 0.5-second intervals): mean reported CPU **0.326%**, peak RSS **50.25 MiB**. This measures the inactive utility with its control window, **not active capture/compositing**, WindowServer/GPU cost, or input latency. Active performance remains unproven.
+- Native arm64 build, ad-hoc signature verification, and 17,424 independent projection/CALayer/inverse samples passed.
+- TextEdit remained visibly projected for 158.87 seconds, delivering 9,092 complete frames (57.23 frames/s). This is capture delivery, not end-to-end latency.
+- Clicking the projected Bold button enabled and disabled actual TextEdit formatting; dragging across the projected first line visibly selected text.
+- The user explicitly confirmed typing, cursor placement, and scrolling worked through the tilted TextEdit window.
+- A style popup opened. Selecting Bold through it did not consistently work; the user also reported dropdown alignment failures.
+- During a 30-second capture run with live text edits, 59 `ps` samples averaged 6.39% CPU and peaked at 94.89 MiB RSS. This excludes WindowServer/GPU work, power, and input latency. It does not apply to the newer two-stream compositor.
+- SIGTERM ended the utility process. Initial stop logs shared a generic reason and could not distinguish shortcut, controls, and Space changes.
 
-## Still unproven
+Machine-readable evidence: `native/evidence/transformed-textedit-m3.json` and `native/evidence/active-textedit-m3.json`. No desktop images or typed text are published.
 
-Persistent visible perspective plus working mapped clicks, keyboard focus, scrolling, dragging, popup menus, dialogs, overlapping target windows, Finder/Safari/Terminal behavior, emergency shortcut effectiveness during captured interaction, forced-termination cleanup during active capture, sustained M3 performance, full-screen transitions, and multi-display handling.
+## Two-stream rendering and manipulation trials
 
-The first input experiment was stopped by its source-state safety check before interactive actions could be tested. The monitor was instrumented and its numeric decoding corrected; treating an occluded window as automatically gone was removed. Window discovery now includes other-Space windows for investigation. Those changes still need a full interactive test.
+The measurements below belong to binary SHA-256 `3a5be4863b91c3d6584b8bb4a760f0100fe093f03b79e49e19d2a27016c44e0d`. The prior two-stream build was `c8d9e7223a9da05543be4856e8a64d39fd318874ab99014cfc86d35ae611e89e`. They do not validate later builds.
 
-## Current immediate blocker
+- Added Option-drag movement, Option–Shift-drag rotation, Option-scroll depth, and 3D menu controls.
+- Added mouse-move forwarding, projected cursor feedback, and same-process popup-window routing. Menu success still needs verification.
+- Replaced the black surround with a live desktop-background patch excluding the original target and utility windows. Transparent capture and rounded clipping remove the prior opaque corner pixels by construction; the combined on-screen appearance still needs confirmation.
+- Original windows remain unchanged. Movement changes only the presentation panel.
+- Emergency handler installation is checked as well as hotkey registration. Stop reasons now distinguish Space, display, sleep, controls, and termination.
+- A first two-stream build crashed in `SCStreamConfiguration.copyWithZone` / `CGColorCreateCopy`: its `backgroundColor` property uses assign semantics. The color now has session lifetime. TextEdit remained accessible after that crash.
+- The corrected two-stream build started successfully: 1,193 target frames and 607 background frames over 20.67 seconds, then stopped on an observed **Space change**. Automation selected the background patch window instead of the interactive panel; full manipulation regression is pending.
+- A user screenshot of the prior two-stream build established a projected font menu and cyan cursor, but its highlighted item did not line up with the cursor. This is a failed menu acceptance case.
+- Mouse events are now constructed at the mapped destination instead of copying private source-window coordinates. Scroll events retain their existing phase/momentum data. Capture-geometry and popup-route diagnostics were added; menu correction is not yet confirmed.
+- This build delivered 4,036 target frames and 2,054 background frames over 70.27 seconds (57.43 target frames/s). It received 1,519 transform updates during manual manipulation. Capture geometry remained 586 × 488 points at scale 2 with content scale 1.
+- Its two-stream 30-second sample: 59 samples, mean reported CPU 13.10%, peak RSS 59.09 MiB. Excludes WindowServer/GPU, power, and input latency. RSS differences across runs are not a memory optimization claim.
+- The run stopped on a Space change. A subsequent screenshot verified the original TextEdit window was flat and accessible with its contents intact.
+- Both privacy grants were renewed and observed as allowed. No SIP or other security setting was changed.
 
-The latest development binary needs renewed TCC grants. During renewal, System Settings entered a modal flow that repeatedly timed out through the computer-use tool, including visual and accessibility inspection. The user was asked to finish/dismiss that inaccessible dialog and re-enable the same two already-authorized permissions, then restart the app. No new SIP change is proposed.
+## Private API experiments retained
 
-This is an **access/testing blocker**, not proof of a fundamental macOS impossibility. The capture-and-input route remains an experiment. The next action is to complete the transformed-input gate in `EXPERIMENTS.md`, fix failures, and only then expand into a multiwindow manager. Do not substitute the captured image for a working result.
+Owned-window affine transformation changed, persisted, and restored. The same foreign TextEdit operation returned success but read back unchanged after run-loop flushing. Private warp symbols returned 0 without a verified visible foreign warp. These were ordinary probe-context observations, not a proof that all privileged/native approaches are impossible. No Dock injection was attempted.
+
+## Mouse-interception regression
+
+A later build (`4a762c0bd74565d66f39ccb58943022044a30f98428bde809915b0639864538f`) successfully installed a mouse-only session event tap and targeted an existing Zen window. It suppressed raw pointer events inside the projected surface, posted mapped events, and used a custom native cursor. The user reported **cursor disappearance and broken hover inside the transformed floating window**. The utility was stopped. This is a failed experiment, not an input fix.
+
+`ProofSession.experimentalMouseTapEnabled` is now false. The normal system cursor and ordinary event delivery remain enabled by default. The failed route is retained only for the reproducible comparison in `EXPERIMENTS.md`. Popup consistency remains unresolved; visual perspective and manipulation do not satisfy that requirement.
+
+The user confirmed normal cursor visibility and responsiveness after stopping the failed build. An intermediate fallback (`c9700c8e07ae500dc479aaf45eca1c733ebfd1f19e0f4605a7c64ee514470332`) compiled and passed local signature verification but was superseded before interaction testing. See [whole-desktop scene direction](DESKTOP-SCENE.md) for the clarified requirement and verification gates.
+
+## Latest source and hover investigation
+
+Latest binary: `8603b24d8d59042768818b721b56653368b5bd9b1f048bdef48fe88f1d55040c`. It consolidates the renderer into one canvas, includes projected-corner bounds at extreme tilts, snapshots queued input mapping, and sends releases for tracked posted buttons during normal restoration. It also restores on pointer-probe tap failure/readback mismatch and uses common-mode timeout timers. Build/signature checks pass. Expanded tests cover 3,509,000 projection points and 580,000 translated corners. These code checks do not establish live emergency-drag or crash behavior.
+
+The preceding annotated-mouse build (`af52faf6f2742fb9b5bbd64dcfa5c4444abfb360140252148f4a4b56e73fe462`) was tested manually. The user's final clarification: cursor visible, no projected duplicate; hover/alignment wrong, other actions working. This supersedes the initial broader description of cursor failure for that build. 180 tap records put the sampled system pointer within 1.18 points of the original hardware event (mean 0.012), while input was remapped elsewhere. Exact menu-item acceptance was not recorded. Evidence: `native/evidence/annotated-hover-m3.json`.
+
+A separate 30-second system-pointer mapping probe is available, disabled by default. It uses two visible cursors and no cursor disassociation. In the preceding build (`ff26649c46a3bc01306a43a97aa22eeeb3adef76e6eba02fd9b1a12938874304`), it started capture and restored at 30.002 seconds. No physical input was observed during that trial, so it establishes timeout behavior only. The diagnostic target separately confirmed automation can post clicks without moving the actual pointer; physical-mouse hover testing remains necessary.
+
+The preceding build was also forcibly terminated with SIGKILL during ordinary two-stream capture, with no button held. Its original diagnostic window remained flat and accessible; a subsequent click incremented the intended D counter. This does not validate termination while pointer mapping or a drag is active. Evidence: `native/evidence/pointer-probe-lifecycle-m3.json`.
+
+## Remaining acceptance gaps
+
+Correct popup/menu selection, service-owned dialogs, overlapping windows, reliable focus transitions, Finder/Safari/Terminal coverage, hardware-global emergency shortcut, forced termination during mapped pointer/drag input, latest-build performance, full-screen transitions, and multi-display behavior remain unverified. One display is available. Space changes currently restore the ordinary desktop rather than maintaining the transform.
+
+This remains a single-window experimental proof. Its backdrop is a composited rectangle, not a complete desktop hit-testing manager. Clicking exposed patch regions does not correctly address the underlying desktop. No polished multiwindow product is claimed, and no fundamental macOS impossibility has been established.
 
 ## Preservation
 

@@ -8,6 +8,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow!
     var information: NSTextField!
     var picker: NSPopUpButton!
+    var routeToggle: NSButton!
+    var pointerToggle: NSButton!
     var candidates: [SCWindow] = []
     var session: ProofSession?
     var hotkey: EventHotKeyRef?
@@ -16,6 +18,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     var signals: [DispatchSourceSignal] = []
     var logFile: FileHandle?
     var starting = false
+    var startGeneration: UInt64 = 0
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
@@ -32,23 +35,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(withTitle: "3D Desktop — Experimental Proof", action: #selector(showControls), keyEquivalent: "")
         menu.addItem(withTitle: "Restore Desktop Now", action: #selector(restore), keyEquivalent: "")
         menu.addItem(NSMenuItem.separator())
+        for (index, title) in ["Tilt left", "Tilt right", "Tilt up", "Tilt down", "Nearer", "Farther", "Reset view"].enumerated() {
+            let item = NSMenuItem(title: title, action: #selector(adjustView(_:)), keyEquivalent: "")
+            item.tag = index; menu.addItem(item)
+        }
+        menu.addItem(NSMenuItem.separator())
         menu.addItem(withTitle: "Quit 3D Desktop", action: #selector(quit), keyEquivalent: "q")
         for item in menu.items { item.target = self }
         status.menu = menu
         var spec = EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed))
-        InstallEventHandler(GetApplicationEventTarget(), { _, _, context in
+        let handlerResult = InstallEventHandler(GetApplicationEventTarget(), { _, _, context in
             guard let context else { return OSStatus(eventNotHandledErr) }
-            Unmanaged<AppDelegate>.fromOpaque(context).takeUnretainedValue().restore()
+            Unmanaged<AppDelegate>.fromOpaque(context).takeUnretainedValue().stopProof(reason: "emergency shortcut")
             return noErr
         }, 1, &spec, Unmanaged.passUnretained(self).toOpaque(), &eventHandler)
         let result = RegisterEventHotKey(UInt32(kVK_ANSI_0), UInt32(controlKey | optionKey | cmdKey),
                                         EventHotKeyID(signature: 0x33444450, id: 1), GetApplicationEventTarget(), 0, &hotkey)
-        log(["event":"emergencyShortcut", "result":result])
+        if handlerResult != noErr || result != noErr {
+            if let hotkey { UnregisterEventHotKey(hotkey) }; hotkey = nil
+        }
+        log(["event":"emergencyShortcut", "result":result, "handlerResult":handlerResult])
         buildControls()
         for name in [NSWorkspace.activeSpaceDidChangeNotification, NSWorkspace.willSleepNotification] {
-            observers.append(NSWorkspace.shared.notificationCenter.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in self?.restore() })
+            observers.append(NSWorkspace.shared.notificationCenter.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in self?.stopProof(reason: name == NSWorkspace.willSleepNotification ? "system sleep" : "Space changed") })
         }
-        observers.append(NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object:nil, queue:.main) { [weak self] _ in self?.restore() })
+        observers.append(NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object:nil, queue:.main) { [weak self] _ in self?.stopProof(reason: "display configuration changed") })
         for sig in [SIGTERM, SIGINT] {
             signal(sig, SIG_IGN)
             let source = DispatchSource.makeSignalSource(signal: sig, queue: .main)
@@ -78,8 +89,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     func buildControls() {
-        window = NSWindow(contentRect: NSRect(x:250,y:250,width:610,height:350), styleMask:[.titled,.closable], backing:.buffered, defer:false)
+        window = NSWindow(contentRect: NSRect(x:250,y:250,width:650,height:455), styleMask:[.titled,.closable], backing:.buffered, defer:false)
         window.title = "3D Desktop — Experimental Proof"
+        window.collectionBehavior = [.moveToActiveSpace]
         window.isReleasedWhenClosed = false
         let stack = NSStackView(); stack.orientation = .vertical; stack.alignment = .leading; stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +99,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSLayoutConstraint.activate([stack.leadingAnchor.constraint(equalTo:window.contentView!.leadingAnchor,constant:22),
                                      stack.trailingAnchor.constraint(equalTo:window.contentView!.trailingAnchor,constant:-22),
                                      stack.topAnchor.constraint(equalTo:window.contentView!.topAnchor,constant:20)])
-        let text = NSTextField(wrappingLabelWithString:"Experimental native compositor proof, not a finished window manager.\nChoose a disposable window. Perspective stays active during interaction.\nRestore: Control–Option–Command–0. Auto-stop after 3 minutes.")
+        let text = NSTextField(wrappingLabelWithString:"Experimental native compositor proof, not a finished window manager.\nChoose a disposable window. Perspective stays active during interaction.\nOption-drag: move · Option–Shift-drag: tilt · Option-scroll: depth.\nRestore: Control–Option–Command–0. Auto-stop after 3 minutes.")
         stack.addArrangedSubview(text)
         information = NSTextField(wrappingLabelWithString: "")
         stack.addArrangedSubview(information)
@@ -98,11 +110,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         stack.addArrangedSubview(permissions)
         picker = NSPopUpButton(); picker.addItem(withTitle:"Grant permissions, then Refresh")
         stack.addArrangedSubview(picker)
+        routeToggle = NSButton(checkboxWithTitle: "Test late mouse routing (experimental; normal cursor)", target: nil, action: nil)
+        stack.addArrangedSubview(routeToggle)
+        pointerToggle = NSButton(checkboxWithTitle: "Test system-pointer mapping (30 seconds; two visible cursors)", target: nil, action: nil)
+        stack.addArrangedSubview(pointerToggle)
         let actions = NSStackView()
         actions.addArrangedSubview(NSButton(title:"Start Interaction Proof",target:self,action:#selector(startProof)))
         actions.addArrangedSubview(NSButton(title:"Restore Desktop",target:self,action:#selector(restore)))
         stack.addArrangedSubview(actions)
-        stack.addArrangedSubview(NSTextField(wrappingLabelWithString:"No original windows are hidden or moved. No audio, network, or login item.\nWindow contents remain in memory. Local diagnostic log contains event coordinates, never keystrokes."))
+        stack.addArrangedSubview(NSTextField(wrappingLabelWithString:"Original windows remain untouched. Live desktop patch replaces dark surround. No audio or network.\nCaptured window and desktop patch remain in memory. Local log records pointer coordinates, never keystrokes."))
         updatePermissions()
     }
     func updatePermissions() {
@@ -125,7 +141,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 candidates = content.windows.filter { $0.windowLayer == 0 && $0.frame.width > 150 && $0.frame.height > 100 && $0.owningApplication?.processID != getpid() }
                 picker.removeAllItems()
                 for candidate in candidates { picker.addItem(withTitle:"\(candidate.owningApplication?.applicationName ?? "App") — \(candidate.title ?? "Window") [\(candidate.windowID)]") }
-                if let index = candidates.firstIndex(where: { $0.owningApplication?.bundleIdentifier == "com.apple.TextEdit" }) { picker.selectItem(at:index) }
+                if let index = candidates.firstIndex(where: { $0.owningApplication?.bundleIdentifier == "com.apple.TextEdit" && !($0.title ?? "").isEmpty }) { picker.selectItem(at:index) }
                 if candidates.isEmpty { picker.addItem(withTitle:"No eligible windows on current Space") }
             } catch { information.stringValue = error.localizedDescription }
     }
@@ -133,16 +149,38 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard hotkey != nil, !starting, candidates.indices.contains(picker.indexOfSelectedItem), AXIsProcessTrusted(), CGPreflightScreenCaptureAccess() else { updatePermissions(); return }
         restore()
         let target = candidates[picker.indexOfSelectedItem]
-        let proof = ProofSession(target:target, log:{ [weak self] in self?.log($0) }, ended:{ [weak self] reason in self?.information.stringValue = "Restored: \(reason)" })
-        session = proof; starting = true
+        let proof = ProofSession(target:target, annotatedRouting:routeToggle.state == .on, systemPointerRouting:pointerToggle.state == .on,
+                                 log:{ [weak self] in self?.log($0) }, ended:{ [weak self] reason in self?.information.stringValue = "Restored: \(reason)" })
+        starting = true
+        let generation = startGeneration
         Task { @MainActor in
-            defer { starting = false }
+            defer { if startGeneration == generation { starting = false } }
+            // Let any Space/focus transition settle before adding overlays or a tap.
+            // The emergency action invalidates this pending start as well.
+            proof.focusTarget()
+            try? await Task.sleep(nanoseconds: 350_000_000)
+            guard startGeneration == generation else { return }
+            session = proof
             do { try await proof.start(); if !proof.stopped { window.orderOut(nil) } }
             catch { proof.stop(error.localizedDescription); showControls(); information.stringValue = error.localizedDescription }
         }
     }
-    @objc func restore() { session?.stop("restore requested"); session = nil }
-    @objc func quit() { restore(); NSApp.terminate(nil) }
+    @objc func adjustView(_ sender: NSMenuItem) {
+        guard let session, !session.stopped else { return }
+        switch sender.tag {
+        case 0: session.adjust(yaw: -5)
+        case 1: session.adjust(yaw: 5)
+        case 2: session.adjust(pitch: -5)
+        case 3: session.adjust(pitch: 5)
+        case 4: session.adjust(depth: -50)
+        case 5: session.adjust(depth: 50)
+        default:
+            session.resetView()
+        }
+    }
+    func stopProof(reason: String) { startGeneration &+= 1; starting = false; session?.stop(reason); session = nil }
+    @objc func restore() { stopProof(reason: "restore control") }
+    @objc func quit() { stopProof(reason: "utility quit or termination signal"); NSApp.terminate(nil) }
     func applicationWillTerminate(_ notification: Notification) { restore(); if let hotkey { UnregisterEventHotKey(hotkey) }; try? logFile?.close() }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { showControls(); return true }

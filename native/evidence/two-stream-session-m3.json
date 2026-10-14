@@ -1,0 +1,51 @@
+{
+  "binary_sha256": "3a5be4863b91c3d6584b8bb4a760f0100fe093f03b79e49e19d2a27016c44e0d",
+  "events": [
+    {
+      "event": "launch",
+      "os": "Version 26.6.2 (Build 25G83)",
+      "timestamp": "2026-10-14T08:13:17Z",
+      "version": "0.1.0-experimental"
+    },
+    {
+      "event": "emergencyShortcut",
+      "handlerResult": 0,
+      "result": 0,
+      "timestamp": "2026-10-14T08:13:17Z"
+    },
+    {
+      "event": "captureGeometry",
+      "metadata": {
+        "contentRect": "{\n    Height = 488;\n    Width = 586;\n    X = 0;\n    Y = 0;\n}",
+        "contentScale": "1",
+        "scaleFactor": "2"
+      },
+      "timestamp": "2026-10-14T08:14:15Z"
+    },
+    {
+      "depth": 80,
+      "event": "started",
+      "fpsLimit": 60,
+      "height": 976,
+      "pid": 34163,
+      "pitch": -8,
+      "timestamp": "2026-10-14T08:14:15Z",
+      "width": 1172,
+      "window": 18902,
+      "yaw": 25
+    },
+    {
+      "backdropFrames": 2054,
+      "captureDeliveryAgeP50ms": 1.19891700160224,
+      "captureDeliveryAgeP95ms": 1.6947080002864823,
+      "completeFrames": 4036,
+      "deliveredFPS": 57.43468925960673,
+      "event": "stopped",
+      "reason": "Space changed",
+      "seconds": 70.27112102508545,
+      "timestamp": "2026-10-14T08:15:25Z"
+    }
+  ],
+  "manipulation_events": 1519,
+  "restoration": "After Space-change stop, original TextEdit document was accessible and visibly flat in computer-use screenshot."
+}
